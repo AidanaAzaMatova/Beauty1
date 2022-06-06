@@ -1,0 +1,188 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="{% static 'css/layout.css' %}" rel="stylesheet" type="text/css" media="all">
+    <title>Сұлулық дүкен салоны</title>
+    <style>
+      .preloader {
+      position: fixed;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+      /* фоновый цвет */
+      background: #e0e0e0;
+      z-index: 1001;
+    }
+    
+    .preloader__image {
+      position: relative;
+      top: 50%;
+      left: 50%;
+      width: 70px;
+      height: 70px;
+      margin-top: -35px;
+      margin-left: -35px;
+      text-align: center;
+      animation: preloader-rotate 2s infinite linear;
+    }
+    
+    @keyframes preloader-rotate {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    
+    .loaded_hiding .preloader {
+      transition: 0.3s opacity;
+      opacity: 0;
+    }
+    
+    .loaded .preloader {
+      display: none;
+    }
+    </style>
+</head>
+<body id="top">
+  <div class="preloader">
+    <svg class="preloader__image" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+      <path fill="currentColor"
+        d="M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-48 368c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm208-208c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zM96 256c0-26.51-21.49-48-48-48S0 229.49 0 256s21.49 48 48 48 48-21.49 48-48zm12.922 99.078c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.491-48-48-48zm294.156 0c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.49-48-48-48zM108.922 60.922c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.491-48-48-48z">
+      </path>
+    </svg>
+  </div>
+    
+    <div class="bgded overlay" style="background-color: #ea4c89;"> 
+      <header id="header" class="hoc clear"> 
+        <div id="logo" class="one_quarter first">
+          <h1><a href="#">Сұлулық</a></h1>
+          <p>дүкен салоны</p>
+        </div>
+        <div class="three_quarter">
+          <ul class="nospace clear">
+            <li class="one_third first">
+              <div class="block clear"><a href="#"><i class="fas fa-phone"></i></a> <span><strong>Қоңырау шалыңыз:</strong> +8 (777) 212 7897</span></div>
+            </li>
+            <li class="one_third">
+              <div class="block clear"><a href="#"><i class="fas fa-envelope"></i></a> <span><strong>Хабарлама жолдаңыз:</strong> a19071997@mail.ru</span></div>
+            </li>
+            <li class="one_third">
+              <div class="block clear"><a href="#"><i class="fas fa-clock"></i></a> <span><strong> Дүйсенбі - Сенбі:</strong> 08.00 - 18.00</span></div>
+            </li>
+          </ul>
+        </div>
+        
+      </header>
+     
+      <section id="navwrapper" class="hoc clear"> 
+        
+        <nav id="mainav">
+          <ul class="clear">
+            <li class="active"><a href="{% url 'main_page' %}">Басты</a></li>
+            <li><a class="drop" href="#">ТАУАР КАТЕГОРИЯЛАРЫ</a>
+              <ul>
+                <li><a href="{% url 'ishop' %}">Қолға арналған лак</a></li>
+                <li><a href="{% url 'smarket' %}">Макияж щеткасы</a></li>
+                <li><a href="{% url 'shopping'%}">Көзге арналған тень</a></li>
+                <li><a href="{% url 'fshop' %}">Бетке арналған опадалап</a></li>
+                <li><a href="{% url 'icompany' %}">Көзге арналған тушь</a></li>
+                <li><a href="{% url 'edu' %}">Ерін памадасы</a></li>
+              </ul>
+            </li>
+            {% if user.is_authenticated %}
+              <li><a href="#">Сәлем :{{ user.get_username }}</a></li>
+              <li><a href="{% url 'logout'%}?next={{request.path}}">Шығу</a></li>
+              <li><a href="{% url 'addnew' %}" style="border: 2px solid green;">ЖАҢА ТАУАР ҚОСУ</a></li>
+            {% else %}
+            <li><a href="{% url 'login' %}?next={{request.path}}">Кіру</a></li>
+            <li><a href="{% url 'register' %}">Тіркелу</a></li>
+            {% endif %}
+          </ul>
+        </nav>
+      </section><br><br>
+        
+      </div>
+
+      <div class="regform" style="margin-left:100px; margin-top: 120px;">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form|crispy}}
+        <button type="submit" class="btn btn-success">Жаңа тауар қосу</button><br><br>
+    </form>
+    </div>
+    
+</div>
+<div class="bgded overlay row4" style="background-color: #ea4c89;">
+  <footer id="footer" class="hoc clear"> 
+    
+    <div class="center btmspace-50">
+      <h6 class="heading">Сұлулық дүкен салоны</h6>
+      <ul class="faico clear">
+        <li><a class="faicon-dribble" href="#"><i class="fab fa-dribbble"></i></a></li>
+        <li><a class="faicon-facebook" href="#"><i class="fab fa-facebook"></i></a></li>
+        <li><a class="faicon-google-plus" href="#"><i class="fab fa-google-plus-g"></i></a></li>
+        <li><a class="faicon-linkedin" href="#"><i class="fab fa-linkedin"></i></a></li>
+        <li><a class="faicon-twitter" href="#"><i class="fab fa-twitter"></i></a></li>
+        <li><a class="faicon-vk" href="#"><i class="fab fa-vk"></i></a></li>
+      </ul>
+    </div>
+    
+    <hr class="btmspace-50">
+    
+    <div class="div_flex" style="display: flex; justify-content: space-between;">
+      <div class="one_quarter first">
+        <h6 class="heading">БАЙЛАНЫС</h6>
+        <p class="nospace btmspace-15">Егер сіз біраз ақпарат қосқыңыз келсе немесе біздің командаға қосылғыңыз келсе, бізге электрондық поштаңызды қалдырыңыз</p>
+        <form action="#" method="post">
+          <fieldset>
+            <legend>Newsletter:</legend>
+            <input class="btmspace-15" type="text" value="" placeholder="Аты">
+            <input class="btmspace-15" type="text" value="" placeholder="Email">
+            <button type="submit" value="submit">Жолдау</button>
+          </fieldset>
+        </form>
+      </div>
+      
+      <div class="one_quarter">
+        <h6 class="heading" style="text-transform: uppercase;">
+          Біздің команда қайда орналасқан?</h6>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1884.8271701521287!2d76.91027737383226!3d43.23463584210306!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3883692f027581ad%3A0x2426740f56437e63!2z0JzQtdC20LTRg9C90LDRgNC-0LTQvdGL0Lkg0YPQvdC40LLQtdGA0YHQuNGC0LXRgiDQuNC90YTQvtGA0LzQsNGG0LjQvtC90L3Ri9GFINGC0LXRhdC90L7Qu9C-0LPQuNC5!5e0!3m2!1sru!2skz!4v1639848603565!5m2!1sru!2skz" width="350" height="350" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+      </div>
+    </div>
+
+    
+  </footer>
+</div>
+
+<div class="wrapper row5" style="background:#ea4c89;">
+  <div id="copyright" class="hoc clear"> 
+    
+    <p class="fl_left">Copyright &copy; 2022 - Құқықтар сақталмаған</p>
+    
+    
+  </div>
+</div>
+  
+  <a id="backtotop" href="#top"><i class="fas fa-chevron-up"></i></a>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/jquery.backtotop.js' %}"></script>
+    <script src="{% static 'js/jquery.mobilemenu.js' %}"></script>
+    <script>
+      window.onload = function () {
+        document.body.classList.add('loaded_hiding');
+        window.setTimeout(function () {
+          document.body.classList.add('loaded');
+          document.body.classList.remove('loaded_hiding');
+        }, 500);
+      }
+    </script>
+</body>
+</html>
