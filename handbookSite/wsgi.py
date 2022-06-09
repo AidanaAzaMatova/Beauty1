@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'nauryzbayev.pythonanywhere.com')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'handbookSite.settings')
 
 application = get_wsgi_application()
